@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode=development",
+    "start": "node ./dist/bundle.js",
     "test": "jest"
   },
   "author": "",
