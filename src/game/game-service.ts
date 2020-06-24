@@ -1,10 +1,11 @@
+import { LeaderboardsStorage, leaderboardsStorage } from './../leaderboards/leaderboards-storage';
 import { Point } from './point';
 import { sessionStorage, SessionStorage } from './session-storage';
 import { GameFieldFactory, gameFieldFactory } from './game-field-factory';
 import { CheckFieldResult } from './check-fields-result';
 
 export class GameService {
-    constructor(private sessionStorage: SessionStorage, private gameFieldFactory: GameFieldFactory) {
+    constructor(private sessionStorage: SessionStorage, private gameFieldFactory: GameFieldFactory, private leaderboardsStorage: LeaderboardsStorage) {
     }
 
     createGame(name: string): string {
@@ -38,14 +39,24 @@ export class GameService {
             });
         });
 
+        const totalExploredCellsCount = exploredCellsCount + points.length;
+        const totalFoundTreasuresCount = foundTreasuresCount + newlyFoundTreasures;
+
         this.sessionStorage.putValue(name, {
-            exploredCellsCount: exploredCellsCount + 3,
-            foundTreasuresCount: foundTreasuresCount + newlyFoundTreasures,
+            exploredCellsCount: totalExploredCellsCount,
+            foundTreasuresCount: totalFoundTreasuresCount,
             gameField,
         });
+
+        if (totalFoundTreasuresCount === 3) {
+            this.leaderboardsStorage.add({
+                name,
+                score: totalExploredCellsCount
+            });
+        }
 
         return revealedFields;
     }
 };
 
-export const gameService = new GameService(sessionStorage, gameFieldFactory);
+export const gameService = new GameService(sessionStorage, gameFieldFactory, leaderboardsStorage);
