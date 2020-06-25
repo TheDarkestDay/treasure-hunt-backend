@@ -1,7 +1,7 @@
 import { GameField } from './game-field';
 
 export interface GameState {
-    exploredCellsCount: number;
+    turnsTaken: number;
     foundTreasuresCount: number;
     gameField: GameField;
 };

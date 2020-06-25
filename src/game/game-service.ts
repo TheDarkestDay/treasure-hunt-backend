@@ -12,7 +12,7 @@ export class GameService {
         const gameField = this.gameFieldFactory.createGameField();
 
         const newGameState = {
-            exploredCellsCount: 0,
+            turnsTaken: 0,
             foundTreasuresCount: 0,
             gameField,
         };
@@ -22,7 +22,7 @@ export class GameService {
     }
 
     checkFields(name: string, points: Point[]): CheckFieldResult[] {
-        const {gameField, exploredCellsCount, foundTreasuresCount} = this.sessionStorage.getValue(name);
+        const {gameField, turnsTaken, foundTreasuresCount} = this.sessionStorage.getValue(name);
 
         const revealedFields: CheckFieldResult[] = [];
         let newlyFoundTreasures = 0;
@@ -39,11 +39,11 @@ export class GameService {
             });
         });
 
-        const totalExploredCellsCount = exploredCellsCount + points.length;
+        const totalTurns = turnsTaken + 1;
         const totalFoundTreasuresCount = foundTreasuresCount + newlyFoundTreasures;
 
         this.sessionStorage.putValue(name, {
-            exploredCellsCount: totalExploredCellsCount,
+            turnsTaken: totalTurns,
             foundTreasuresCount: totalFoundTreasuresCount,
             gameField,
         });
@@ -51,7 +51,7 @@ export class GameService {
         if (totalFoundTreasuresCount === 3) {
             this.leaderboardsStorage.add({
                 name,
-                score: totalExploredCellsCount
+                score: totalTurns
             });
         }
 

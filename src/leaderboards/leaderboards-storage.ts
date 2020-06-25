@@ -7,8 +7,8 @@ export class LeaderboardsStorage {
         this.storage.push(newEntry);
     }
 
-    getAll() {
-        return this.storage;
+    getAll(): LeaderboardsEntry[] {
+        return this.storage.sort((entryA, entryB) => entryA.score - entryB.score);
     }
 }
 

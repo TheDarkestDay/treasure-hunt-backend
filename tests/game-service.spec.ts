@@ -1,3 +1,4 @@
+import { LeaderboardsStorage } from './../src/leaderboards/leaderboards-storage';
 import { GameFieldFactory } from './../src/game/game-field-factory';
 import { SessionStorage } from './../src/game/session-storage';
 import { GameService } from './../src/game/game-service';
@@ -7,11 +8,13 @@ describe('GameService', () => {
     let gameService: GameService;
     let sessionStorage: SessionStorage;
     let gameFieldFactory: GameFieldFactory;
+    let leaderboardsStorage: LeaderboardsStorage;
 
     beforeEach(() => {
         sessionStorage = new SessionStorage();
         gameFieldFactory = new GameFieldFactory();
-        gameService = new GameService(sessionStorage, gameFieldFactory);
+        leaderboardsStorage = new LeaderboardsStorage();
+        gameService = new GameService(sessionStorage, gameFieldFactory, leaderboardsStorage);
     });
 
     it('should create a new game session and return a player name as a session ID', () => {
